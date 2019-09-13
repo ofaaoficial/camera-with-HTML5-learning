@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Camera with HTML5</title>
+    <script src="assets/js/ofaa.js"></script>
+    <link rel="stylesheet" href="assets/css/ofaa.css">
+</head>
+<body>
+    <section>
+        <h1>Capturar fotos con HTML5</h1>
+        <article>
+            <h2>Manera basica</h2>
+            <p>Utilizando un input file con la etiqueta capture podemos seleccionar una imagen almacenada en el dispositivo o tambien podemos tomar una foto utilizando la camara del dispositivo.</p>
+
+            <h3>Example</h3>
+            <img id="frame-1" class="frame">
+            <input type="file" accept="images/*" capture id="camera-1">
+            <figure>
+                <figcaption>Codigo manipular la imagen</figcaption>
+                <pre>
+                    <code>
+let camera = el('#camera-1');
+let frame = el('#frame-1');
+
+on('change', e => {
+    let file = e.target.files[0];
+    frame.src = URL.createObjectURL(file);
+}, camera);
+                    </code>
+                </pre>
+            </figure>
+            <script>
+                let camera1 = el('#camera-1');
+                let frame1 = el('#frame-1');
+
+                on('change', e => {
+                    let file = e.target.files[0];
+                    frame1.src = URL.createObjectURL(file);
+                }, camera1);
+            </script>
+        </article>
+        <article>
+            <h2>Acceso a la camara</h2>
+            <p>Para poder hacer uso de esta función se requere un origen seguro HTTPS.</p>
+
+            <h3>Example</h3>
+            <video class="frame" id="frame-2" controls autoplay></video>
+            <figure>
+                <figcaption>Codigo acceso a la camara</figcaption>
+                <pre>
+                    <code>
+let frame2 = el('#frame-2');
+
+let handleSuccess = stream => frame2.srcObject = stream;
+
+navigator.mediaDevices.getUserMedia({video: true})
+    .then(handleSuccess)
+    .catch(err => alert(err));
+                    </code>
+                </pre>
+            </figure>
+            <script>
+                let frame2 = el('#frame-2');
+
+                let handleSuccess1 = stream => frame2.srcObject = stream;
+
+                navigator.mediaDevices.getUserMedia({video: true})
+                    .then(handleSuccess1)
+                    .catch(err => alert(err));
+            </script>
+        </article>
+        <article>
+            <h2>Tomar una foto</h2>
+            <p>Tomar una foto con el dispositivo ademas para la grabacion de la camara para ahorro de energia y mejor procesamiento.</p>
+            <h3>Example</h3>
+            <section class="camera">
+                <div class="col-5">
+                    <video id="frame-3" class="frame" autoplay></video>
+                    <button id="capture">TOMAR FOTO</button>
+                </div>
+                <div class="col-5">
+                    <canvas id="snapshot" width="400" height="300"></canvas>
+                </div>
+            </section>
+            <figure>
+                <figcaption>Codigo para tomar foto y parar grabacion</figcaption>
+                <pre>
+                    <code>
+let frame3 = el('#frame-3');
+let videoTrack = undefined;
+
+let handleSuccess2 = stream => {
+    frame3.srcObject = stream;
+    videoTrack = stream.getVideoTracks();
+};
+
+navigator.mediaDevices.getUserMedia({video: true})
+    .then(handleSuccess2)
+    .catch(err => alert(err));
+
+
+let snapshotCanvas = el('#snapshot');
+let captureBtn = el('#capture');
+
+on('click', e => {
+    let ctx = snapshotCanvas.getContext('2d');
+    ctx.drawImage(frame3, 0,0, snapshotCanvas.width, snapshotCanvas.height);
+    videoTrack.forEach(track => track.stop());
+}, captureBtn);
+                    </code>
+                </pre>
+            </figure>
+
+            <script>
+                let frame3 = el('#frame-3');
+                let videoTrack = undefined;
+
+                let handleSuccess2 = stream => {
+                    frame3.srcObject = stream;
+                    videoTrack = stream.getVideoTracks();
+                };
+
+                navigator.mediaDevices.getUserMedia({video: true})
+                    .then(handleSuccess2)
+                    .catch(err => alert(err));
+
+
+                let snapshotCanvas = el('#snapshot');
+                let captureBtn = el('#capture');
+
+                on('click', e => {
+                    let ctx = snapshotCanvas.getContext('2d');
+                    ctx.drawImage(frame3, 0,0, snapshotCanvas.width, snapshotCanvas.height);
+                    videoTrack.forEach(track => track.stop());
+                }, captureBtn);
+            </script>
+
+
+        </article>
+    </section>
+
+
+
+</body>
+</html>
